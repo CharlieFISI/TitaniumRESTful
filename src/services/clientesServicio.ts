@@ -7,7 +7,7 @@ import { RowDataPacket } from 'mysql2/promise'
 export async function getAllEntries (_req: Request, res: Response): Promise<Response> {
   try {
     const conn = await connect()
-    const getAll = await conn.query('SELECT * FROM Cliente')
+    const getAll = await conn.query('SELECT * FROM Clientes')
     return res.json(getAll[0])
   } catch (e) {
     let message
@@ -21,10 +21,15 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
   try {
     const newEntry: ClienteEntryWithoutId = addClienteEntry(req.body)
     const conn = await connect()
-    await conn.query('INSERT INTO Cliente SET ?', [newEntry])
-    return res.json({
-      message: 'Entrada de Cliente añadida'
-    })
+    const dniUnique = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [newEntry.DNI]) as RowDataPacket[]
+    if (dniUnique[0].length === 0) {
+      return res.status(404).json({ message: 'El registro con el id especificado no existe' })
+    } else {
+      await conn.query('INSERT INTO Cliente SET ?', [newEntry])
+      return res.json({
+        message: 'Entrada de Cliente añadida'
+      })
+    }
   } catch (e) {
     let message
     if (e instanceof Error) message = e.message
@@ -37,7 +42,7 @@ export async function getIdEntry (req: Request, res: Response): Promise<Response
   try {
     const { id } = req.params
     const conn = await connect()
-    const getId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]) as RowDataPacket[]
+    const getId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]) as RowDataPacket[]
     if (getId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
@@ -55,11 +60,11 @@ export async function deleteIdEntry (req: Request, res: Response): Promise<Respo
   try {
     const { id } = req.params
     const conn = await connect()
-    const deleteId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]) as RowDataPacket[]
-    await conn.query('DELETE FROM Cliente WHERE ClienteId = ?', [id])
+    const deleteId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]) as RowDataPacket[]
     if (deleteId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
+      await conn.query('DELETE FROM Clientes WHERE ClienteId = ?', [id])
       return res.json({
         message: 'Entrada de Cliente eliminada'
       })
@@ -77,11 +82,11 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
     const { id } = req.params
     const updateEntry: ClienteEntry = req.body
     const conn = await connect()
-    const updateId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]) as RowDataPacket[]
-    await conn.query('UPDATE Cliente set ? WHERE ClienteId = ?', [updateEntry, id])
+    const updateId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]) as RowDataPacket[]
     if (updateId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
+      await conn.query('UPDATE Clientes set ? WHERE ClienteId = ?', [updateEntry, id])
       return res.json({
         message: 'Entrada de Cliente actualizada'
       })
