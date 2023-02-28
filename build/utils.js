@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toPlanEntryWithoutId = void 0;
-const parseNombre = (nombreFromRequest) => {
+exports.addClienteEntry = exports.addPlanEntry = void 0;
+const parseString = (nombreFromRequest) => {
     if (!isString(nombreFromRequest)) {
         throw new Error('Nombre inexistente o incorrecto');
     }
     return nombreFromRequest;
 };
-const parsePrecio = (precioFromRequest) => {
-    if (!isNumber(precioFromRequest)) {
+const parseInt = (intFromRequest) => {
+    if (!isNumber(intFromRequest)) {
         throw new Error('Precio inexistente o incorrecta');
     }
-    return precioFromRequest;
+    return intFromRequest;
 };
-const parseDuracion = (duracionFromRequest) => {
-    if (!isInt(duracionFromRequest)) {
+const parseNumber = (numberFromRequest) => {
+    if (!isInt(numberFromRequest)) {
         throw new Error('Duracion inexistente o incorrecta');
     }
-    return duracionFromRequest;
+    return numberFromRequest;
 };
 /* const parseDuracion = (weatherFromRequest: any): Weather => {
   if (!isString(weatherFromRequest) || !isWeather(weatherFromRequest)) {
@@ -52,12 +52,23 @@ const isWeather = (param: any): boolean => {
 const isVisibility = (param: any): boolean => {
   return Object.values(Visibility).includes(param)
 } */
-const toPlanEntryWithoutId = (object) => {
+const addPlanEntry = (object) => {
     const newEntry = {
-        Nombre: parseNombre(object.Nombre),
-        Precio: parsePrecio(object.Precio),
-        Duracion: parseDuracion(object.Duracion)
+        Nombre: parseString(object.Nombre),
+        Precio: parseNumber(object.Precio),
+        Duracion: parseInt(object.Duracion)
     };
     return newEntry;
 };
-exports.toPlanEntryWithoutId = toPlanEntryWithoutId;
+exports.addPlanEntry = addPlanEntry;
+const addClienteEntry = (object) => {
+    const newEntry = {
+        Nombre: parseString(object.Nombre),
+        Apellido: parseString(object.Apellido),
+        Email: parseString(object.Email),
+        DNI: parseString(object.DNI),
+        Telefono: parseNumber(object.Telefono)
+    };
+    return newEntry;
+};
+exports.addClienteEntry = addClienteEntry;

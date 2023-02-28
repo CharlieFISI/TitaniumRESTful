@@ -6,7 +6,7 @@ const utils_1 = require("../utils");
 async function getAllEntries(_req, res) {
     try {
         const conn = await (0, conexion_1.connect)();
-        const getAll = await conn.query('SELECT * FROM Planes');
+        const getAll = await conn.query('SELECT * FROM Cliente');
         return res.json(getAll[0]);
     }
     catch (e) {
@@ -21,11 +21,11 @@ async function getAllEntries(_req, res) {
 exports.getAllEntries = getAllEntries;
 async function addEntry(req, res) {
     try {
-        const newEntry = (0, utils_1.addPlanEntry)(req.body);
+        const newEntry = (0, utils_1.addClienteEntry)(req.body);
         const conn = await (0, conexion_1.connect)();
-        await conn.query('INSERT INTO Planes SET ?', [newEntry]);
+        await conn.query('INSERT INTO Cliente SET ?', [newEntry]);
         return res.json({
-            message: 'Entrada de Plan añadida'
+            message: 'Entrada de Cliente añadida'
         });
     }
     catch (e) {
@@ -42,7 +42,7 @@ async function getIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const getId = await conn.query('SELECT * FROM Planes WHERE PlanId = ?', [id]);
+        const getId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
         if (getId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
@@ -64,14 +64,14 @@ async function deleteIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const deleteId = await conn.query('SELECT * FROM Planes WHERE PlanId = ?', [id]);
-        await conn.query('DELETE FROM Planes WHERE PlanId = ?', [id]);
+        const deleteId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
+        await conn.query('DELETE FROM Cliente WHERE ClienteId = ?', [id]);
         if (deleteId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
             return res.json({
-                message: 'Entrada de Plan eliminada'
+                message: 'Entrada de Cliente eliminada'
             });
         }
     }
@@ -90,14 +90,14 @@ async function updateIdEntry(req, res) {
         const { id } = req.params;
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
-        const updateId = await conn.query('SELECT * FROM Planes WHERE PlanId = ?', [id]);
-        await conn.query('UPDATE Planes set ? WHERE PlanId = ?', [updateEntry, id]);
+        const updateId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
+        await conn.query('UPDATE Cliente set ? WHERE ClienteId = ?', [updateEntry, id]);
         if (updateId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
             return res.json({
-                message: 'Entrada de Plan actualizada'
+                message: 'Entrada de Cliente actualizada'
             });
         }
     }
