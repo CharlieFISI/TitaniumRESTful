@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 
 import indexRouter from './index'
 import planRouter from './routes/planes'
+import clienteRouter from './routes/clientes'
 
 export class App {
   private readonly app: Application
@@ -24,6 +25,7 @@ export class App {
   routes (): void {
     this.app.use(indexRouter)
     this.app.use('/api/planes', planRouter)
+    this.app.use('/api/clientes', clienteRouter)
   }
 
   async listen (): Promise<void> {
