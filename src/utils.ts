@@ -1,26 +1,67 @@
-import { PlanEntryWithoutId, ClienteEntryWithoutId } from './types'
+import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId } from './types'
 
-const parseString = (nombreFromRequest: any): string => {
-  if (!isString(nombreFromRequest)) {
+const parseNombre = (stringFromRequest: any): string => {
+  if (!isString(stringFromRequest)) {
     throw new Error('Nombre inexistente o incorrecto')
   }
-  return nombreFromRequest
+  return stringFromRequest
 }
 
-const parseInt = (intFromRequest: any): number => {
-  if (!isNumber(intFromRequest)) {
+const parsePrecio = (numberFromRequest: any): number => {
+  if (!isNumber(numberFromRequest)) {
     throw new Error('Precio inexistente o incorrecta')
   }
-  return intFromRequest
+  return numberFromRequest
 }
 
-const parseNumber = (numberFromRequest: any): number => {
+const parseDuracion = (numberFromRequest: any): number => {
   if (!isInt(numberFromRequest)) {
     throw new Error('Duracion inexistente o incorrecta')
   }
   return numberFromRequest
 }
 
+const parseApellido = (stringFromRequest: any): string => {
+  if (!isString(stringFromRequest)) {
+    throw new Error('Apellido inexistente o incorrecto')
+  }
+  return stringFromRequest
+}
+
+const parseEmail = (stringFromRequest: any): string => {
+  if (!isString(stringFromRequest)) {
+    throw new Error('Email inexistente o incorrecto')
+  }
+  return stringFromRequest
+}
+
+const parseDNI = (stringFromRequest: any): string => {
+  if (!isString(stringFromRequest)) {
+    throw new Error('DNI inexistente o incorrecto')
+  }
+  return stringFromRequest
+}
+
+const parseTelefono = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('Telefono inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseIngresoId = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('IngresoId inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseCantidad = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('Cantidad inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
 /* const parseDuracion = (weatherFromRequest: any): Weather => {
   if (!isString(weatherFromRequest) || !isWeather(weatherFromRequest)) {
     throw new Error('Weather inexistente o incorrecto')
@@ -61,20 +102,29 @@ const isVisibility = (param: any): boolean => {
 
 export const addPlanEntry = (object: any): PlanEntryWithoutId => {
   const newEntry: PlanEntryWithoutId = {
-    Nombre: parseString(object.Nombre),
-    Precio: parseNumber(object.Precio),
-    Duracion: parseInt(object.Duracion)
+    Nombre: parseNombre(object.Nombre),
+    Precio: parsePrecio(object.Precio),
+    Duracion: parseDuracion(object.Duracion)
   }
   return newEntry
 }
 
 export const addClienteEntry = (object: any): ClienteEntryWithoutId => {
   const newEntry: ClienteEntryWithoutId = {
-    Nombre: parseString(object.Nombre),
-    Apellido: parseString(object.Apellido),
-    Email: parseString(object.Email),
-    DNI: parseString(object.DNI),
-    Telefono: parseNumber(object.Telefono)
+    Nombre: parseNombre(object.Nombre),
+    Apellido: parseApellido(object.Apellido),
+    Email: parseEmail(object.Email),
+    DNI: parseDNI(object.DNI),
+    Telefono: parseTelefono(object.Telefono)
+  }
+  return newEntry
+}
+
+export const addClaseEntry = (object: any): ClaseEntryWithoutId => {
+  const newEntry: ClaseEntryWithoutId = {
+    IngresoId: parseIngresoId(object.IngresoId),
+    Cantidad: parseCantidad(object.Cantidad),
+    Precio: parsePrecio(object.Precio)
   }
   return newEntry
 }
