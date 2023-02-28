@@ -20,5 +20,13 @@ export interface ClienteEntry {
   Telefono: number
 }
 
+export interface ClaseEntry {
+  ClaseId: number
+  IngresoId: number
+  Cantidad: number
+  Precio: number
+}
+
 export type PlanEntryWithoutId = Omit<PlanEntry, 'PlanId'>
 export type ClienteEntryWithoutId = Omit<ClienteEntry, 'ClienteId'>
+export type ClaseEntryWithoutId = Omit<ClaseEntry, 'ClaseId'>
