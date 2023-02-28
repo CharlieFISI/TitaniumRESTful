@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { connect } from '../conexion'
 import { addPlanEntry } from '../utils'
 import { RowDataPacket } from 'mysql2/promise'
- 
+
 export async function getAllEntries (_req: Request, res: Response): Promise<Response> {
   try {
     const conn = await connect()
