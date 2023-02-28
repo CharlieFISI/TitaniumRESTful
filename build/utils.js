@@ -8,7 +8,7 @@ const parseNombre = (nombreFromRequest) => {
     return nombreFromRequest;
 };
 const parsePrecio = (precioFromRequest) => {
-    if (!isFloat(precioFromRequest)) {
+    if (!isNumber(precioFromRequest)) {
         throw new Error('Precio inexistente o incorrecta');
     }
     return precioFromRequest;
@@ -35,11 +35,11 @@ const parseVisibility = (VisibilityFromRequest: any): Visibility => {
 const isString = (string) => {
     return typeof string === 'string';
 };
+const isNumber = (precio) => {
+    return (typeof precio === 'number' && !isNaN(precio));
+};
 const isInt = (int) => {
     return ((typeof int === 'number' && !isNaN(int)) && Number.isInteger(int));
-};
-const isFloat = (float) => {
-    return ((typeof float === 'number' && !isNaN(float)) && !Number.isInteger(float));
 };
 /* const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date))
@@ -57,7 +57,6 @@ const toPlanEntryWithoutId = (object) => {
         Nombre: parseNombre(object.Nombre),
         Precio: parsePrecio(object.Precio),
         Duracion: parseDuracion(object.Duracion)
-        // ...
     };
     return newEntry;
 };

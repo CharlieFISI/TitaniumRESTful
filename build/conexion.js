@@ -11,10 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connect = void 0;
 const promise_1 = require("mysql2/promise");
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 function connect() {
     return __awaiter(this, void 0, void 0, function* () {
-        const connection = yield (0, promise_1.createPool)({
+        const connection = (0, promise_1.createPool)({
             host: 'containers-us-west-127.railway.app',
             user: 'root',
             password: 'yqz3OYH3P8Va5jdFcmNw',

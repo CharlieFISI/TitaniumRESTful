@@ -63,13 +63,23 @@ function deleteIdEntry(req, res) {
 exports.deleteIdEntry = deleteIdEntry;
 function updateIdEntry(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const id = req.params.id;
-        const updateEntry = req.body;
-        const conn = yield (0, conexion_1.connect)();
-        yield conn.query('UPDATE Planes set ? WHERE PlanId = ?', [updateEntry, id]);
-        return res.json({
-            message: 'Entrada de Plan actualizada'
-        });
+        try {
+            const id = req.params.id;
+            const updateEntry = req.body;
+            const conn = yield (0, conexion_1.connect)();
+            yield conn.query('UPDATE Planes set ? WHERE PlanId = ?', [updateEntry, id]);
+            return res.json({
+                message: 'Entrada de Plan actualizada'
+            });
+        }
+        catch (e) {
+            let message;
+            if (e instanceof Error)
+                message = e.message;
+            else
+                message = String(e);
+            return res.status(400).send(message);
+        }
     });
 }
 exports.updateIdEntry = updateIdEntry;
