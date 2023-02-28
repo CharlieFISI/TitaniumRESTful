@@ -59,7 +59,7 @@ const isVisibility = (param: any): boolean => {
   return Object.values(Visibility).includes(param)
 } */
 
-export const toPlanEntryWithoutId = (object: any): PlanEntryWithoutId => {
+export const addPlanEntry = (object: any): PlanEntryWithoutId => {
   const newEntry: PlanEntryWithoutId = {
     Nombre: parseNombre(object.Nombre),
     Precio: parsePrecio(object.Precio),
