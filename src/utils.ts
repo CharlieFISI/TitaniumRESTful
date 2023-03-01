@@ -1,4 +1,4 @@
-import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId } from './types'
+import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId, IngresoEntryWithoutId } from './types'
 
 const parseNombre = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -62,6 +62,42 @@ const parseCantidad = (numberFromRequest: any): number => {
   }
   return numberFromRequest
 }
+
+const parseTipoIngreso = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('Tipo de ingreso inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseUsuarioId = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('UsuarioId inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseClienteId = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('ClienteId inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseMontoTotal = (numberFromRequest: any): number => {
+  if (!isNumber(numberFromRequest)) {
+    throw new Error('Monto total inexistente o incorrecta')
+  }
+  return numberFromRequest
+}
+
+const parseFecha = (dateFromRequest: any): Date => {
+  if (!isDate(dateFromRequest)) {
+    throw new Error('Fecha inexistente o incorrecta')
+  }
+  return dateFromRequest
+}
+
 /* const parseDuracion = (weatherFromRequest: any): Weather => {
   if (!isString(weatherFromRequest) || !isWeather(weatherFromRequest)) {
     throw new Error('Weather inexistente o incorrecto')
@@ -88,10 +124,10 @@ const isInt = (int: number): boolean => {
   return ((typeof int === 'number' && !isNaN(int)) && Number.isInteger(int))
 }
 
-/* const isDate = (date: string): boolean => {
+const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date))
 }
-
+/*
 const isWeather = (param: any): boolean => {
   return Object.values(Weather).includes(param)
 }
@@ -125,6 +161,18 @@ export const addClaseEntry = (object: any): ClaseEntryWithoutId => {
     IngresoId: parseIngresoId(object.IngresoId),
     Cantidad: parseCantidad(object.Cantidad),
     Precio: parsePrecio(object.Precio)
+  }
+  return newEntry
+}
+
+export const addIngresoEntry = (object: any): IngresoEntryWithoutId => {
+  const newEntry: IngresoEntryWithoutId = {
+    IngresoId: parseIngresoId(object.IngresoId),
+    TipoIngreso: parseTipoIngreso(object.TipoIngreso),
+    UsuarioId: parseUsuarioId(object.UsuarioId),
+    ClienteId: parseClienteId(object.ClienteId),
+    MontoTotal: parseMontoTotal(object.MontoTotal),
+    Fecha: parseFecha(object.Fecha)
   }
   return newEntry
 }
