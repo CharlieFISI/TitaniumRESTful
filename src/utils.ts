@@ -1,4 +1,4 @@
-import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId, IngresoEntryWithoutId } from './types'
+import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId, IngresoEntryWithoutId, EntrenadorEntryWithoutId, UsuarioEntryWithoutIdAndDate } from './types'
 
 const parseNombre = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -167,12 +167,34 @@ export const addClaseEntry = (object: any): ClaseEntryWithoutId => {
 
 export const addIngresoEntry = (object: any): IngresoEntryWithoutId => {
   const newEntry: IngresoEntryWithoutId = {
-    IngresoId: parseIngresoId(object.IngresoId),
-    TipoIngreso: parseTipoIngreso(object.TipoIngreso),
+    TipoIngresoId: parseTipoIngreso(object.TipoIngresoId),
     UsuarioId: parseUsuarioId(object.UsuarioId),
     ClienteId: parseClienteId(object.ClienteId),
     MontoTotal: parseMontoTotal(object.MontoTotal),
     Fecha: parseFecha(object.Fecha)
+  }
+  return newEntry
+}
+
+export const addEntrenadorEntry = (object: any): EntrenadorEntryWithoutId => {
+  const newEntry: EntrenadorEntryWithoutId = {
+    Nombre: parseNombre(object.Nombre),
+    Apellido: parseApellido(object.Apellido),
+    Email: parseEmail(object.Email),
+    DNI: parseDNI(object.DNI),
+    Telefono: parseTelefono(object.Telefono)
+  }
+  return newEntry
+}
+
+export const addUsuarioEntry = (object: any): UsuarioEntryWithoutIdAndDate => {
+  const newEntry: UsuarioEntryWithoutIdAndDate = {
+    Nombre: parseNombre(object.Nombre),
+    Apellido: parseApellido(object.Apellido),
+    Email: parseEmail(object.Email),
+    DNI: parseDNI(object.DNI),
+    Telefono: parseTelefono(object.Telefono),
+    Contrasenia: parseDNI(object.Contrasenia)
   }
   return newEntry
 }
