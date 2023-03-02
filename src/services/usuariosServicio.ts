@@ -78,6 +78,7 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
   try {
     const { id } = req.params
     const updateEntry: UsuarioEntry = req.body
+    updateEntry.Contrasenia = crypto.SHA512(updateEntry.Contrasenia).toString()
     const conn = await connect()
     const updateId = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [id]) as RowDataPacket[]
     await conn.query('UPDATE Usuarios set ? WHERE UsuarioId = ?', [updateEntry, id])
