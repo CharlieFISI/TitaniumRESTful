@@ -21,11 +21,11 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
   try {
     const newEntry: ClienteEntryWithoutId = addClienteEntry(req.body)
     const conn = await connect()
-    const dniUnique = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [newEntry.DNI]) as RowDataPacket[]
-    if (dniUnique[0].length === 0) {
-      return res.status(404).json({ message: 'El registro con el id especificado no existe' })
+    const dniUnique = await conn.query('SELECT * FROM Clientes WHERE DNI = ?', [newEntry.DNI]) as RowDataPacket[]
+    if (dniUnique[0].length !== 0) {
+      return res.status(404).json({ message: 'Existe un registro con el mismo DNI' })
     } else {
-      await conn.query('INSERT INTO Cliente SET ?', [newEntry])
+      await conn.query('INSERT INTO Clientes SET ?', [newEntry])
       return res.json({
         message: 'Entrada de Cliente añadida'
       })
