@@ -3,7 +3,9 @@ import express, { Application } from 'express'
 import indexRouter from './index'
 import planRouter from './routes/planes'
 import clienteRouter from './routes/clientes'
-import clasesRouter from './routes/clases'
+import claseRouter from './routes/clases'
+import entrenadorRouter from './routes/entrenadores'
+import usuarioRouter from './routes/usuarios'
 
 export class App {
   private readonly app: Application
@@ -27,7 +29,9 @@ export class App {
     this.app.use(indexRouter)
     this.app.use('/api/planes', planRouter)
     this.app.use('/api/clientes', clienteRouter)
-    this.app.use('/api/clases', clasesRouter)
+    this.app.use('/api/clases', claseRouter)
+    this.app.use('/api/entrenadores', entrenadorRouter)
+    this.app.use('/api/usuarios', usuarioRouter)
   }
 
   async listen (): Promise<void> {
