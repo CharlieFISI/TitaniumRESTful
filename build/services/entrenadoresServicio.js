@@ -6,7 +6,7 @@ const utils_1 = require("../utils");
 async function getAllEntries(_req, res) {
     try {
         const conn = await (0, conexion_1.connect)();
-        const getAll = await conn.query('SELECT * FROM Clases');
+        const getAll = await conn.query('SELECT * FROM Entrenadores');
         return res.json(getAll[0]);
     }
     catch (e) {
@@ -21,18 +21,12 @@ async function getAllEntries(_req, res) {
 exports.getAllEntries = getAllEntries;
 async function addEntry(req, res) {
     try {
-        const newEntry = (0, utils_1.addClaseEntry)(req.body);
+        const newEntry = (0, utils_1.addEntrenadorEntry)(req.body);
         const conn = await (0, conexion_1.connect)();
-        const ingresoExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]);
-        if (ingresoExist[0].length === 0) {
-            return res.status(404).json({ message: 'El registro con el id especificado no existe' });
-        }
-        else {
-            await conn.query('INSERT INTO Clases SET ?', [newEntry]);
-            return res.json({
-                message: 'Entrada de Clase añadida'
-            });
-        }
+        await conn.query('INSERT INTO Entrenadores SET ?', [newEntry]);
+        return res.json({
+            message: 'Entrada de Entrenador añadida'
+        });
     }
     catch (e) {
         let message;
@@ -48,7 +42,7 @@ async function getIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const getId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
+        const getId = await conn.query('SELECT * FROM Entrenadores WHERE EntrenadorId = ?', [id]);
         if (getId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
@@ -70,14 +64,14 @@ async function deleteIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const deleteId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
-        await conn.query('DELETE FROM Clases WHERE ClaseId = ?', [id]);
+        const deleteId = await conn.query('SELECT * FROM Entrenadores WHERE EntrenadorId = ?', [id]);
+        await conn.query('DELETE FROM Entrenadores WHERE EntrenadorId = ?', [id]);
         if (deleteId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
             return res.json({
-                message: 'Entrada de Clase eliminada'
+                message: 'Entrada de Entrenador eliminada'
             });
         }
     }
@@ -96,21 +90,15 @@ async function updateIdEntry(req, res) {
         const { id } = req.params;
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
-        const ingresoExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
-        if (ingresoExist[0].length === 0) {
+        const updateId = await conn.query('SELECT * FROM Entrenadores WHERE EntrenadorId = ?', [id]);
+        await conn.query('UPDATE Entrenadores set ? WHERE EntrenadorId = ?', [updateEntry, id]);
+        if (updateId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
-            const updateId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
-            await conn.query('UPDATE Clases set ? WHERE ClaseId = ?', [updateEntry, id]);
-            if (updateId[0].length === 0) {
-                return res.status(404).json({ message: 'El registro con el id especificado no existe' });
-            }
-            else {
-                return res.json({
-                    message: 'Entrada de Clase actualizada'
-                });
-            }
+            return res.json({
+                message: 'Entrada de Entrenador actualizada'
+            });
         }
     }
     catch (e) {

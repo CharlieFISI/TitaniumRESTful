@@ -6,7 +6,7 @@ const utils_1 = require("../utils");
 async function getAllEntries(_req, res) {
     try {
         const conn = await (0, conexion_1.connect)();
-        const getAll = await conn.query('SELECT * FROM Cliente');
+        const getAll = await conn.query('SELECT * FROM Clientes');
         return res.json(getAll[0]);
     }
     catch (e) {
@@ -23,10 +23,16 @@ async function addEntry(req, res) {
     try {
         const newEntry = (0, utils_1.addClienteEntry)(req.body);
         const conn = await (0, conexion_1.connect)();
-        await conn.query('INSERT INTO Cliente SET ?', [newEntry]);
-        return res.json({
-            message: 'Entrada de Cliente añadida'
-        });
+        const dniUnique = await conn.query('SELECT * FROM Clientes WHERE DNI = ?', [newEntry.DNI]);
+        if (dniUnique[0].length !== 0) {
+            return res.status(404).json({ message: 'Existe un registro con el mismo DNI' });
+        }
+        else {
+            await conn.query('INSERT INTO Clientes SET ?', [newEntry]);
+            return res.json({
+                message: 'Entrada de Cliente añadida'
+            });
+        }
     }
     catch (e) {
         let message;
@@ -42,7 +48,7 @@ async function getIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const getId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
+        const getId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]);
         if (getId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
@@ -64,12 +70,12 @@ async function deleteIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const deleteId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
-        await conn.query('DELETE FROM Cliente WHERE ClienteId = ?', [id]);
+        const deleteId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]);
         if (deleteId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
+            await conn.query('DELETE FROM Clientes WHERE ClienteId = ?', [id]);
             return res.json({
                 message: 'Entrada de Cliente eliminada'
             });
@@ -90,12 +96,12 @@ async function updateIdEntry(req, res) {
         const { id } = req.params;
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
-        const updateId = await conn.query('SELECT * FROM Cliente WHERE ClienteId = ?', [id]);
-        await conn.query('UPDATE Cliente set ? WHERE ClienteId = ?', [updateEntry, id]);
+        const updateId = await conn.query('SELECT * FROM Clientes WHERE ClienteId = ?', [id]);
         if (updateId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
+            await conn.query('UPDATE Clientes set ? WHERE ClienteId = ?', [updateEntry, id]);
             return res.json({
                 message: 'Entrada de Cliente actualizada'
             });

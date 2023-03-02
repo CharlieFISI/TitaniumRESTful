@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const index_1 = __importDefault(require("./index"));
 const planes_1 = __importDefault(require("./routes/planes"));
 const clientes_1 = __importDefault(require("./routes/clientes"));
+const clases_1 = __importDefault(require("./routes/clases"));
 class App {
     constructor(port) {
         this.port = port;
@@ -26,6 +27,7 @@ class App {
         this.app.use(index_1.default);
         this.app.use('/api/planes', planes_1.default);
         this.app.use('/api/clientes', clientes_1.default);
+        this.app.use('/api/clases', clases_1.default);
     }
     async listen() {
         await this.app.listen(this.port);

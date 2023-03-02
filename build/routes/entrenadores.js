@@ -5,13 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-misused-promises */
 const express_1 = __importDefault(require("express"));
-const clasesServicio_1 = require("../services/clasesServicio");
+const entrenadoresServicio_1 = require("../services/entrenadoresServicio");
 const router = express_1.default.Router();
 router.route('/')
-    .get(clasesServicio_1.getAllEntries)
-    .post(clasesServicio_1.addEntry);
+    .get(entrenadoresServicio_1.getAllEntries)
+    .post(entrenadoresServicio_1.addEntry);
 router.route('/:id')
-    .get(clasesServicio_1.getIdEntry)
-    .delete(clasesServicio_1.deleteIdEntry)
-    .put(clasesServicio_1.updateIdEntry);
+    .get(entrenadoresServicio_1.getIdEntry)
+    .delete(entrenadoresServicio_1.deleteIdEntry)
+    .put(entrenadoresServicio_1.updateIdEntry);
 exports.default = router;
