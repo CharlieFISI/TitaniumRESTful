@@ -6,7 +6,7 @@ const utils_1 = require("../utils");
 async function getAllEntries(_req, res) {
     try {
         const conn = await (0, conexion_1.connect)();
-        const getAll = await conn.query('SELECT * FROM Clases');
+        const getAll = await conn.query('SELECT * FROM PlanesIngresos');
         return res.json(getAll[0]);
     }
     catch (e) {
@@ -21,9 +21,9 @@ async function getAllEntries(_req, res) {
 exports.getAllEntries = getAllEntries;
 async function addEntry(req, res) {
     try {
-        const newEntry = (0, utils_1.addClaseEntry)(req.body);
+        const newEntry = (0, utils_1.addPlanesIngresoEntry)(req.body);
         const conn = await (0, conexion_1.connect)();
-        const IngresoIdUnique = await conn.query('SELECT * FROM Clases WHERE IngresoId = ?', [newEntry.IngresoId]);
+        const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [newEntry.IngresoId]);
         const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [newEntry.IngresoId]);
         if (IngresoIdExist[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
@@ -33,7 +33,7 @@ async function addEntry(req, res) {
                 return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' });
             }
             else {
-                await conn.query('INSERT INTO Clases SET ?', [newEntry]);
+                await conn.query('INSERT INTO PlanesIngresos SET ?', [newEntry]);
                 return res.json({
                     message: 'Entrada de Ingreso de plan añadida'
                 });
@@ -54,7 +54,7 @@ async function getIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const getId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
+        const getId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]);
         if (getId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
@@ -76,14 +76,14 @@ async function deleteIdEntry(req, res) {
     try {
         const { id } = req.params;
         const conn = await (0, conexion_1.connect)();
-        const deleteId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
-        await conn.query('DELETE FROM Clases WHERE ClaseId = ?', [id]);
+        const deleteId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]);
+        await conn.query('DELETE FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]);
         if (deleteId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
             return res.json({
-                message: 'Entrada de Ingreso de dlase eliminada'
+                message: 'Entrada de Ingreso de plan eliminada'
             });
         }
     }
@@ -102,8 +102,8 @@ async function updateIdEntry(req, res) {
         const { id } = req.params;
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
-        const updateId = await conn.query('SELECT * FROM Clases WHERE ClaseId = ?', [id]);
-        const IngresoIdUnique = await conn.query('SELECT * FROM Clases WHERE IngresoId = ?', [updateEntry.IngresoId]);
+        const updateId = await conn.query('SELECT * FROM PlanesIngresos WHERE PlanIngresoId = ?', [id]);
+        const IngresoIdUnique = await conn.query('SELECT * FROM PlanesIngresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
         const IngresoIdExist = await conn.query('SELECT * FROM Ingresos WHERE IngresoId = ?', [updateEntry.IngresoId]);
         if (IngresoIdExist[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
@@ -113,13 +113,13 @@ async function updateIdEntry(req, res) {
                 return res.status(404).json({ message: 'Existe un registro con el mismo IngresoId' });
             }
             else {
-                await conn.query('UPDATE Clases set ? WHERE PlanIngresoId = ?', [updateEntry, id]);
+                await conn.query('UPDATE PlanesIngresos set ? WHERE PlanIngresoId = ?', [updateEntry, id]);
                 if (updateId[0].length === 0) {
                     return res.status(404).json({ message: 'El registro con el id especificado no existe' });
                 }
                 else {
                     return res.json({
-                        message: 'Entrada de Ingreso de clase actualizada'
+                        message: 'Entrada de Ingreso de plan actualizada'
                     });
                 }
             }

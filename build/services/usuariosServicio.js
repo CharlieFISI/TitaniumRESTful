@@ -114,6 +114,7 @@ async function updateIdEntry(req, res) {
     try {
         const { id } = req.params;
         const updateEntry = req.body;
+        updateEntry.Contrasenia = crypto.SHA512(updateEntry.Contrasenia).toString();
         const conn = await (0, conexion_1.connect)();
         const updateId = await conn.query('SELECT * FROM Usuarios WHERE UsuarioId = ?', [id]);
         await conn.query('UPDATE Usuarios set ? WHERE UsuarioId = ?', [updateEntry, id]);

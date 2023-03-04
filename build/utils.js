@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUsuarioEntry = exports.addEntrenadorEntry = exports.addIngresoEntry = exports.addClaseEntry = exports.addClienteEntry = exports.addPlanEntry = void 0;
+exports.addTipoIngresoEntry = exports.addPlanesIngresoEntry = exports.addFechaClaseEntry = exports.addUsuarioEntry = exports.addEntrenadorEntry = exports.addIngresoEntry = exports.addClaseEntry = exports.addClienteEntry = exports.addPlanEntry = void 0;
 const parseNombre = (stringFromRequest) => {
     if (!isString(stringFromRequest)) {
         throw new Error('Nombre inexistente o incorrecto');
@@ -32,7 +32,12 @@ const parseEmail = (stringFromRequest) => {
     return stringFromRequest;
 };
 const parseDNI = (stringFromRequest) => {
-    if (!isString(stringFromRequest)) {
+    let flag = true;
+    for (let i = 0; i < stringFromRequest.length; i++) {
+        if (!isInt(Number(stringFromRequest[i])))
+            flag = false;
+    }
+    if (!flag) {
         throw new Error('DNI inexistente o incorrecto');
     }
     return stringFromRequest;
@@ -84,6 +89,12 @@ const parseFecha = (dateFromRequest) => {
         throw new Error('Fecha inexistente o incorrecta');
     }
     return dateFromRequest;
+};
+const parseClaseId = (numberFromRequest) => {
+    if (!isInt(numberFromRequest)) {
+        throw new Error('ClaseId inexistente o incorrecta');
+    }
+    return numberFromRequest;
 };
 /* const parseDuracion = (weatherFromRequest: any): Weather => {
   if (!isString(weatherFromRequest) || !isWeather(weatherFromRequest)) {
@@ -181,3 +192,27 @@ const addUsuarioEntry = (object) => {
     return newEntry;
 };
 exports.addUsuarioEntry = addUsuarioEntry;
+const addFechaClaseEntry = (object) => {
+    const newEntry = {
+        ClaseId: parseClaseId(object.ClaseId),
+        Fecha: parseFecha(object.Fecha)
+    };
+    return newEntry;
+};
+exports.addFechaClaseEntry = addFechaClaseEntry;
+const addPlanesIngresoEntry = (object) => {
+    const newEntry = {
+        PlanId: parseClaseId(object.ClaseId),
+        IngresoId: parseIngresoId(object.IngresoId),
+        FechaInicio: parseFecha(object.FechaInicio)
+    };
+    return newEntry;
+};
+exports.addPlanesIngresoEntry = addPlanesIngresoEntry;
+const addTipoIngresoEntry = (object) => {
+    const newEntry = {
+        Nombre: parseNombre(object.Nombre)
+    };
+    return newEntry;
+};
+exports.addTipoIngresoEntry = addTipoIngresoEntry;

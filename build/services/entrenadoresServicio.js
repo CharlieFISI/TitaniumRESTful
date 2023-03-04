@@ -23,10 +23,16 @@ async function addEntry(req, res) {
     try {
         const newEntry = (0, utils_1.addEntrenadorEntry)(req.body);
         const conn = await (0, conexion_1.connect)();
-        await conn.query('INSERT INTO Entrenadores SET ?', [newEntry]);
-        return res.json({
-            message: 'Entrada de Entrenador añadida'
-        });
+        const dniUnique = await conn.query('SELECT * FROM Entrenadores WHERE DNI = ?', [newEntry.DNI]);
+        if (dniUnique[0].length !== 0) {
+            return res.status(404).json({ message: 'Existe un registro con el mismo DNI' });
+        }
+        else {
+            await conn.query('INSERT INTO Entrenadores SET ?', [newEntry]);
+            return res.json({
+                message: 'Entrada de Entrenador añadida'
+            });
+        }
     }
     catch (e) {
         let message;
@@ -90,15 +96,21 @@ async function updateIdEntry(req, res) {
         const { id } = req.params;
         const updateEntry = req.body;
         const conn = await (0, conexion_1.connect)();
+        const dniUnique = await conn.query('SELECT * FROM Entrenadores WHERE DNI = ?', [updateEntry.DNI]);
         const updateId = await conn.query('SELECT * FROM Entrenadores WHERE EntrenadorId = ?', [id]);
-        await conn.query('UPDATE Entrenadores set ? WHERE EntrenadorId = ?', [updateEntry, id]);
         if (updateId[0].length === 0) {
             return res.status(404).json({ message: 'El registro con el id especificado no existe' });
         }
         else {
-            return res.json({
-                message: 'Entrada de Entrenador actualizada'
-            });
+            if (dniUnique.length !== 0) {
+                return res.status(404).json({ message: 'Existe un registro con el mismo DNI' });
+            }
+            else {
+                await conn.query('UPDATE Entrenadores set ? WHERE EntrenadorId = ?', [updateEntry, id]);
+                return res.json({
+                    message: 'Entrada de Entrenador actualizada'
+                });
+            }
         }
     }
     catch (e) {
