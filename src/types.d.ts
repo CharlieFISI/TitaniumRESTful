@@ -56,9 +56,30 @@ export interface UsuarioEntry {
   Creado: Date
 }
 
+export interface FechaClaseEntry {
+  FechaClaseId: number
+  ClaseId: number
+  Fecha: Date
+}
+
+export interface PlanesIngresoEntry {
+  PlanesIngresoId: number
+  PlanId: number
+  IngresoId: number
+  FechaInicio: Date
+}
+
+export interface TipoIngresoEntry {
+  TipoIngresoId: number
+  Nombre: string
+}
+
 export type PlanEntryWithoutId = Omit<PlanEntry, 'PlanId'>
 export type ClienteEntryWithoutId = Omit<ClienteEntry, 'ClienteId'>
 export type ClaseEntryWithoutId = Omit<ClaseEntry, 'ClaseId'>
 export type IngresoEntryWithoutId = Omit<IngresoEntry, 'IngresoId'>
 export type EntrenadorEntryWithoutId = Omit<EntrenadorEntry, 'EntrenadorId'>
 export type UsuarioEntryWithoutIdAndDate = Omit<UsuarioEntry, 'UsuarioId', 'Creado'>
+export type FechaClaseEntryWithoutId = Omit<FechaClaseEntry, 'FechaClaseId'>
+export type PlanesIngresoEntryWithoutId = Omit<PlanesIngresoEntry, 'PlanesIngresoId'>
+export type TipoIngresoEntryWithoutId = Omit<TipoIngresoEntry, 'TipoIngresoId'>
