@@ -21,10 +21,15 @@ export async function addEntry (req: Request, res: Response): Promise<Response> 
   try {
     const newEntry: EntrenadorEntryWithoutId = addEntrenadorEntry(req.body)
     const conn = await connect()
-    await conn.query('INSERT INTO Entrenadores SET ?', [newEntry])
-    return res.json({
-      message: 'Entrada de Entrenador añadida'
-    })
+    const dniUnique = await conn.query('SELECT * FROM Entrenadores WHERE DNI = ?', [newEntry.DNI]) as RowDataPacket[]
+    if (dniUnique[0].length !== 0) {
+      return res.status(404).json({ message: 'Existe un registro con el mismo DNI' })
+    } else {
+      await conn.query('INSERT INTO Entrenadores SET ?', [newEntry])
+      return res.json({
+        message: 'Entrada de Entrenador añadida'
+      })
+    }
   } catch (e) {
     let message
     if (e instanceof Error) message = e.message
@@ -77,14 +82,19 @@ export async function updateIdEntry (req: Request, res: Response): Promise<Respo
     const { id } = req.params
     const updateEntry: EntrenadorEntry = req.body
     const conn = await connect()
+    const dniUnique = await conn.query('SELECT * FROM Entrenadores WHERE DNI = ?', [updateEntry.DNI]) as RowDataPacket[]
     const updateId = await conn.query('SELECT * FROM Entrenadores WHERE EntrenadorId = ?', [id]) as RowDataPacket[]
-    await conn.query('UPDATE Entrenadores set ? WHERE EntrenadorId = ?', [updateEntry, id])
     if (updateId[0].length === 0) {
       return res.status(404).json({ message: 'El registro con el id especificado no existe' })
     } else {
-      return res.json({
-        message: 'Entrada de Entrenador actualizada'
-      })
+      if (dniUnique.length !== 0) {
+        return res.status(404).json({ message: 'Existe un registro con el mismo DNI' })
+      } else {
+        await conn.query('UPDATE Entrenadores set ? WHERE EntrenadorId = ?', [updateEntry, id])
+        return res.json({
+          message: 'Entrada de Entrenador actualizada'
+        })
+      }
     }
   } catch (e) {
     let message
