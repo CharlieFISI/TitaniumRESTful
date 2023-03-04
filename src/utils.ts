@@ -1,4 +1,4 @@
-import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId, IngresoEntryWithoutId, EntrenadorEntryWithoutId, UsuarioEntryWithoutIdAndDate } from './types'
+import { PlanEntryWithoutId, ClienteEntryWithoutId, ClaseEntryWithoutId, IngresoEntryWithoutId, EntrenadorEntryWithoutId, UsuarioEntryWithoutIdAndDate, FechaClaseEntryWithoutId, TipoIngresoEntryWithoutId, PlanesIngresoEntryWithoutId } from './types'
 
 const parseNombre = (stringFromRequest: any): string => {
   if (!isString(stringFromRequest)) {
@@ -36,7 +36,11 @@ const parseEmail = (stringFromRequest: any): string => {
 }
 
 const parseDNI = (stringFromRequest: any): string => {
-  if (!isString(stringFromRequest)) {
+  let flag = true
+  for (let i = 0; i < stringFromRequest.length; i++) {
+    if (!isInt(Number(stringFromRequest[i]))) flag = false
+  }
+  if (!flag) {
     throw new Error('DNI inexistente o incorrecto')
   }
   return stringFromRequest
@@ -96,6 +100,13 @@ const parseFecha = (dateFromRequest: any): Date => {
     throw new Error('Fecha inexistente o incorrecta')
   }
   return dateFromRequest
+}
+
+const parseClaseId = (numberFromRequest: any): number => {
+  if (!isInt(numberFromRequest)) {
+    throw new Error('ClaseId inexistente o incorrecta')
+  }
+  return numberFromRequest
 }
 
 /* const parseDuracion = (weatherFromRequest: any): Weather => {
@@ -195,6 +206,30 @@ export const addUsuarioEntry = (object: any): UsuarioEntryWithoutIdAndDate => {
     DNI: parseDNI(object.DNI),
     Telefono: parseTelefono(object.Telefono),
     Contrasenia: parseDNI(object.Contrasenia)
+  }
+  return newEntry
+}
+
+export const addFechaClaseEntry = (object: any): FechaClaseEntryWithoutId => {
+  const newEntry: FechaClaseEntryWithoutId = {
+    ClaseId: parseClaseId(object.ClaseId),
+    Fecha: parseFecha(object.Fecha)
+  }
+  return newEntry
+}
+
+export const addPlanesIngresoEntry = (object: any): PlanesIngresoEntryWithoutId => {
+  const newEntry: PlanesIngresoEntryWithoutId = {
+    PlanId: parseClaseId(object.ClaseId),
+    IngresoId: parseIngresoId(object.IngresoId),
+    FechaInicio: parseFecha(object.FechaInicio)
+  }
+  return newEntry
+}
+
+export const addTipoIngresoEntry = (object: any): TipoIngresoEntryWithoutId => {
+  const newEntry: TipoIngresoEntryWithoutId = {
+    Nombre: parseNombre(object.Nombre)
   }
   return newEntry
 }
