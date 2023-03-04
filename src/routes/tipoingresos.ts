@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express'
-import { getAllEntries, addEntry, getIdEntry, deleteIdEntry, updateIdEntry } from '../services/tipoingresoServicio'
+import { getAllEntries, addEntry, getIdEntry, deleteIdEntry, updateIdEntry } from '../services/tipoingresosServicio'
 
 const router = express.Router()
 
